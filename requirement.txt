@@ -1,0 +1,4 @@
+# requirements.txt
+p4p
+matplotlib
+numpy

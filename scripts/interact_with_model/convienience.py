@@ -155,12 +155,12 @@ def plot_track_enc(*, start_pos=res.ref.pos, **kws):
     )
 
 
-# for a position of -25 .. - 50 mm
-# apply_corrections(np.array([-20, 10,  10, -20.15])*1e-3)
 # for a position of -5 .. - 25 mm
-
-
+# first steps made by hand
 apply_corrections(np.array([-10, 3.75, 3.5, -9.75]) * 1e-3)
+# returned ... looking precisly what should be there
+# watch .. out the second angle needs to get it in straight
+apply_corrections(np.array([-10, 3.51, 3.51, -10]) * 1e-3)
 plot_track_enc()
 
 new_orbit = find_orbit(mls_lattice_with_collimator)

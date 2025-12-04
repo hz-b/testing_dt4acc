@@ -1,0 +1,27 @@
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "enrich-accelerator-toolbox"
+version = "0.0.0a1"
+description = "Build environment for testing dt4acc"
+authors = [
+     {name = "Waheedullah Sulaiman Khail", email = "<waheedullah.sulaiman_khail@helmholtz-berlin.de"},
+     {name = "Pierre Schnizer", email = "<pierre.schnizer@helmholtz-berlin.de"},
+]
+license = "GPL-3.0"
+# until we have the repoitory
+homepage = "https://github.com/hzb/testing_dt4acc"
+documentation = "https://github.com/hzb/testing_dt4acc"
+repository = "https://github.com/hzb/testing_dt4acc"
+keywords = []
+
+[tool.poetry]
+# readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+p4p = "*"
+matplotlib = "*"
+accelerator-toolbox = "*"

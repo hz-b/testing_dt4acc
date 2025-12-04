@@ -13,6 +13,7 @@ class OrbitPosition:
     Todo:
         still using swapped dp, ct
     """
+
     #: horizontal position
     x: float
     #: horizontal "angle"
@@ -34,11 +35,11 @@ class OrbitPosition:
 @dataclass
 class NamedOrbitPosition:
     name: str
-    pos : OrbitPosition
+    pos: OrbitPosition
+
 
 @dataclass
 class OrbitResult:
     # start point where it started
-    ref : NamedOrbitPosition
-    orbit : Sequence[NamedOrbitPosition]
-
+    ref: NamedOrbitPosition
+    orbit: Sequence[NamedOrbitPosition]

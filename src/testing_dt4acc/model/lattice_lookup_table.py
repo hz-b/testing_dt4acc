@@ -5,4 +5,3 @@ from dataclasses import dataclass
 class LatticePositionLUTElement:
     index: int
     element: object
-

@@ -15,32 +15,32 @@ from testing_dt4acc.model.survey import NamedSPosition
 
 
 
-bessyii_lattice = Accelerator(
-    file_name="bessyii_lattice_json.json", from_json=True
+mls_lattice = Accelerator(
+    file_name="mls_lattice_json.json", from_json=True
 ).ring
-bessyii_length_orig = bessyii_lattice.cell_length
+mls_length_orig = mls_lattice.cell_length
 
 
-bessyii_lattice_with_collimator = insert_scraper(bessyii_lattice, 201)
+mls_lattice_with_collimator = insert_scraper(mls_lattice, 91)
 
 # Here I can access the elements by name
 # **NB** this lut has to be rebuilt anytime the lattice is changed!
-lut =  build_simple_lut(bessyii_lattice_with_collimator)
+lut =  build_simple_lut(mls_lattice_with_collimator)
 print(lut["test_scraper"])
 
 # Lattice length should be close to 240.0 m
-print(f"Bessy ii lattice length change:  {bessyii_length_orig - bessyii_lattice.cell_length}")
-print(f"Bessy ii lattice length change:  {bessyii_length_orig - bessyii_lattice.cell_length}")
+print(f"MLS lattice length change:  {mls_length_orig - mls_lattice.cell_length}")
+print(f"MLS lattice length change:  {mls_length_orig - mls_lattice.cell_length}")
 
 
 scraper = lut["test_scraper"].element
 # I placed them there ... So I can also access them in this manner
-aperature_entrance = bessyii_lattice_with_collimator[lut["test_scraper"].index-1]
-aperature_exit = bessyii_lattice_with_collimator[lut["test_scraper"].index+1]
+aperature_entrance = mls_lattice_with_collimator[lut["test_scraper"].index - 1]
+aperature_exit = mls_lattice_with_collimator[lut["test_scraper"].index + 1]
 ap_lims = ApertureLimits.from_aperture_data(scraper.RApertures)
 pprint.pprint(ap_lims)
 
-res = find_orbit(bessyii_lattice_with_collimator)
+res = find_orbit(mls_lattice_with_collimator)
 
 pprint.pprint(res.ref)
 
@@ -49,17 +49,17 @@ ap_lims.z.max = -10e-3
 ap_lims.z.min = -25e-3
 scraper.RApertures = ap_lims.get_aperture_data()
 
-scraper_in = find_orbit(bessyii_lattice_with_collimator)
+scraper_in = find_orbit(mls_lattice_with_collimator)
 pprint.pprint(scraper_in.ref)
 
-track_along_ring, track_param, track_data = track(bessyii_lattice_with_collimator, res.ref.pos)
+track_along_ring, track_param, track_data = track(mls_lattice_with_collimator, res.ref.pos)
 track_interest = track_along_ring[190:215]
 bpms = [elem for elem in track_interest if elem.name[:3] == "BPM"]
 pprint.pprint(track_interest)
 pprint.pprint([(info.name, info.pos.is_valid()) for info in track_interest])
 
 # Prepare orbit plot and plot positions to it
-s_pos = compute_s_pos(bessyii_lattice_with_collimator)
+s_pos = compute_s_pos(mls_lattice_with_collimator)
 s_pos_start, = [item for item in s_pos if item.name == aperature_entrance.FamName]
 s_pos_end, = [item for item in s_pos if item.name == aperature_exit.FamName]
 
@@ -68,14 +68,14 @@ ap_limits = ApertureLimits.from_aperture_data(scraper.RApertures)
 # add the scraper
 
 
-ax_lines, _, __ =  at.plot_trajectory(bessyii_lattice_with_collimator, np.array(res.ref.pos.as_sequence()), )
+ax_lines, _, __ =  at.plot_trajectory(mls_lattice_with_collimator, np.array(res.ref.pos.as_sequence()), )
 x_line, y_line = ax_lines.get_lines()
 
 # The correctors that can be changed
-vs_us1 = lut["S2M1T2R"]
-vs_us2 = lut["S3M1T2R"]
-vs_ds1 = lut["S3M2T2R"]
-vs_ds2 = lut["S2M2T2R"]
+vs_us1 = lut["S2M1K3RP"]
+vs_us2 = lut["S3M1K3RP"]
+vs_ds1 = lut["S3M2K3RP"]
+vs_ds2 = lut["S2M2K3RP"]
 
 def get_spos(name: str) -> NamedSPosition:
     t_pos, = [item for item in s_pos if item.name == name]
@@ -130,12 +130,13 @@ def apply_corrections(angles):
         elem.element.KickAngle[1] = angle
 
 
-def plot_track_enc(*, start_pos=res.ref.pos):
+def plot_track_enc(*, start_pos=res.ref.pos, **kws):
     plot_track(
-        lattice=bessyii_lattice_with_collimator,
+        lattice=mls_lattice_with_collimator,
         start_pos=start_pos,
         s_pos=s_pos,
-        axis=ax_lines
+        axis=ax_lines,
+        **kws
     )
 
 # for a position of -25 .. - 50 mm
@@ -143,11 +144,14 @@ def plot_track_enc(*, start_pos=res.ref.pos):
 # for a position of -5 .. - 25 mm
 
 
-apply_corrections(np.array([-6, 3,  1, -4.1])*1e-3)
+apply_corrections(np.array([-10, 3.75,  3.5, -9.75])*1e-3)
 plot_track_enc()
 
-new_orbit = find_orbit(bessyii_lattice_with_collimator)
-plot_track_enc(start_pos=new_orbit.ref.pos)
+new_orbit = find_orbit(mls_lattice_with_collimator)
+try:
+    plot_track_enc(start_pos=new_orbit.ref.pos, linestyle='dashed')
+except AssertionError as ae:
+    print(f"Failed to get track after correction: {ae}")
 
 # ax_lines.set_xlim(35, 55)
 ax_lines.set_ylim(-50e-3, 50e-3)

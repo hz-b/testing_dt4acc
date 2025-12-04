@@ -33,7 +33,8 @@ def plot_track(*, lattice, start_pos, axis, s_pos, **kws):
     ])
     if len(new_orbit) == 0:
         raise AssertionError("Did not find any track at all!")
+    kws.setdefault('linestyle', 'dashdot')
     axis.plot(
-        new_orbit[:, 0], new_orbit[:, 1], '-.', **kws,
+        new_orbit[:, 0], new_orbit[:, 1], **kws,
     )
 

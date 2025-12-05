@@ -3,7 +3,7 @@ requires = [ "poetry-core>=1.0.0",]
 build-backend = "poetry.core.masonry.api"
 
 [project]
-name = "enrich-accelerator-toolbox"
+name = "testing-dt4acc"
 version = "0.0.0a1"
 description = "Build environment for testing dt4acc"
 authors = [
@@ -25,3 +25,4 @@ python = ">=3.7"
 p4p = "*"
 matplotlib = "*"
 accelerator-toolbox = "*"
+lat2db = ">=0.0.3"

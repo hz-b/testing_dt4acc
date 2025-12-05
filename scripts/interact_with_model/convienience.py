@@ -19,7 +19,6 @@ mls_length_orig = mls_lattice.cell_length
 
 
 mls_lattice_with_collimator = insert_scraper(mls_lattice, 91)
-
 # Here I can access the elements by name
 # **NB** this lut has to be rebuilt anytime the lattice is changed!
 lut = build_simple_lut(mls_lattice_with_collimator)
@@ -137,9 +136,9 @@ def apply_corrections(angles):
 
     How to try to find it:
         1. angle: get off the axis and aim to the open whole
-        2. angle: try to get the beam "some how" straight afterwards
+        2. angle: try to get the beam "somehow" straight afterward
         3. angle: get beam to the center of the last steerer
-        4. angle: steer it arond the ring
+        4. angle: steer beam back flat to the orbit
     """
     for elem, angle in zip([vs_us1, vs_us2, vs_ds1, vs_ds2], angles):
         elem.element.KickAngle[1] = angle
@@ -160,7 +159,7 @@ def plot_track_enc(*, start_pos=res.ref.pos, **kws):
 apply_corrections(np.array([-10, 3.75, 3.5, -9.75]) * 1e-3)
 # returned ... looking precisly what should be there
 # watch .. out the second angle needs to get it in straight
-apply_corrections(np.array([-10, 3.51, 3.51, -10]) * 1e-3)
+# apply_corrections(np.array([-10, 3.51, 3.51, -10]) * 1e-3)
 plot_track_enc()
 
 new_orbit = find_orbit(mls_lattice_with_collimator)

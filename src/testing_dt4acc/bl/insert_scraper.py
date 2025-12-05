@@ -1,7 +1,7 @@
 import logging
 import at
 
-logger = logging.getLogger("enrich-at")
+logger = logging.getLogger("testing-dt4acc")
 
 
 def insert_scraper(lattice, index, copy=True):
@@ -12,7 +12,9 @@ def insert_scraper(lattice, index, copy=True):
         [elem.FamName for elem in lattice[index - 5 : index + 5]],
     )
 
-    lattice = lattice.copy()
+    if copy:
+        lattice = lattice.copy()
+
     drift = lattice.pop(index)
     drift_start = at.Drift(family_name=drift.FamName + "_bs", length=drift.Length / 4.0)
     aperture_entry = at.Aperture(
